@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: fernlidae-rabbitmq
+    ports:
+      - "5672:5672"   # Standard AMQP (NestJS uses this to publish)
+      - "15672:15672" # Management UI (Browser dashboard)
+      - "15674:15674" # Web STOMP (React uses this to subscribe)
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: password
+    # This command turns on the STOMP WebSockets plugin before booting
+    command: >
+      bash -c "rabbitmq-plugins enable --offline rabbitmq_web_stomp &&
+      rabbitmq-server"
